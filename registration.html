@@ -82,21 +82,13 @@
 <!----------------------- grid container --------------------------->
 <div id="posts" class="grid-container">
   <div id="post-container">
-    <div class="post">
-      <h2>${post.name}</h2>
-      <p>Email: ${post.email}</p>
-      <p>Age: ${post.age}</p>
-      <p>Membership Type: ${post.membershipType}</p>
-      <p>Swimmer Type: ${post.swimmerType}</p>
-      <button class="update-btn">Update</button>
-    </div>
   </div>
 </div>
 
 
 <!-----------------------Register new member--------------------------------->
 <dialog id="register-dialog">
- <!-- Registration Form (Hidden by Default) https://uiverse.io/glisovic01/stale-chipmunk-33 -->
+ <!--  https://uiverse.io/glisovic01/stale-chipmunk-33 -->
           <div id="registrationFormContainer" class="registration-form" style="display: none;" >
             <div class="container">
                 <div class="title">Member Registration</div>
@@ -135,16 +127,7 @@
                                     <option value="recreational">Recreational</option>
                                     <option value="competitive">Competitive</option>
                                 </select>
-                            </div>
-                            <!-- Team Assignment -->
-                            <div class="input-box">
-                                <span class="details">Team Assignment</span>
-                                <select id="team" name="team" required>
-                                    <option value="">Select...</option>
-                                    <option value="junior">Junior</option>
-                                    <option value="senior">Senior</option>
-                                </select>
-                            </div>
+                            </div>        
                         </div>
                         <!-- Submit Button -->
                         <div class="button">
@@ -211,6 +194,6 @@
     </div>
 
 
- <script src="registration.js"></script>
+ <script src="../registration.js"></script>
 </body>
 </html>

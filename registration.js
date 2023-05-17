@@ -3,7 +3,11 @@
 const endpoint = "https://restinpeace-4a0bb-default-rtdb.firebaseio.com/";
 let posts = [];
 
-window.addEventListener("load", initApp);
+document.addEventListener('DOMContentLoaded', (event) => {
+    console.log("DOMContentLoaded event fired");
+    initApp();
+});
+
 
 //====================INITAPP==========================//
 
@@ -35,10 +39,9 @@ function initApp() {
     .addEventListener("click", closeUpdateForm);
 
 
-
 }
 
-// ====================== get members =========================== //
+// ====================== get posts =========================== //
 async function getPosts() {
   const response = await fetch(`${endpoint}/posts.json`);
   const data = await response.json();
@@ -48,21 +51,19 @@ async function getPosts() {
   }));
   return postObjects;
 }
-
 async function updatePostsGrid() {
   try {
     posts = await getPosts();
     const postContainer = document.getElementById("post-container");
 
-    // Clear the post container
     postContainer.innerHTML = "";
 
-    // Iterate over each post in the data
-    posts.forEach((post) => {
+    posts.forEach((post, index) => {
       const postElement = document.createElement("div");
       postElement.classList.add("post");
 
-      // Set the content of the post element using the desired properties
+      postElement.dataset.index = index;
+
       postElement.innerHTML = `
         <h2>${post.name}</h2>
         <p>Email: ${post.email}</p>
@@ -72,15 +73,15 @@ async function updatePostsGrid() {
         <button class="update-btn">Update</button>
       `;
 
-      
-
       postContainer.appendChild(postElement);
     });
 
-    // Add event listeners to the update buttons
-    const updateButtons = document.querySelectorAll(".update-btn");
-    updateButtons.forEach((button, index) => {
-      button.addEventListener("click", () => openUpdateForm(posts[index]));
+    postContainer.addEventListener("click", function (event) {
+      console.log("update clicked");
+      if (event.target.classList.contains("update-btn")) {
+        const index = event.target.parentNode.dataset.index;
+        openUpdateForm(posts[index]);
+      }
     });
   } catch (error) {
     console.error("Error fetching posts:", error);
@@ -88,19 +89,18 @@ async function updatePostsGrid() {
 }
 
 
+
+
 function openUpdateForm(post) {
-  // Populate the form fields with the current post data
+    console.log(post);
   document.getElementById("update-name").value = post.name;
   document.getElementById("update-email").value = post.email;
   document.getElementById("update-age").value = post.age;
   document.getElementById("update-membershipType").value = post.membershipType;
   document.getElementById("update-activity").value = post.swimmerType;
-  // Add any other fields as needed
 
-  // Store the post ID in a data attribute for later use
   document.getElementById("updateForm").dataset.postId = post.id;
 
-  // Display the form
   document.getElementById("updateFormContainer").style.display = "block";
 }
 
@@ -108,7 +108,6 @@ function openUpdateForm(post) {
 async function updateFormSubmitted(event) {
   event.preventDefault();
 
-  // Get the updated data from the form fields
   const updatedPost = {
     id: document.getElementById("updateForm").dataset.postId,
     name: document.getElementById("update-name").value,
@@ -116,13 +115,10 @@ async function updateFormSubmitted(event) {
     age: document.getElementById("update-age").value,
     membershipType: document.getElementById("update-membershipType").value,
     swimmerType: document.getElementById("update-activity").value,
-    // Add any other fields as needed
   };
 
-  // Call the updatePost function to update the post data
   await updatePost(updatedPost);
 
-  // Close the update form
   closeUpdateForm();
 }
 
@@ -132,10 +128,3 @@ function closeUpdateForm() {
 
 
 
-async function updatePost(updatedPost) {
-  // Here, add the code to send a request to your backend to update the post data.
-  // The specific way to do this will depend on your backend.
-
-  // After the post data has been updated, refresh the posts grid:
-  updatePostsGrid();
-}
